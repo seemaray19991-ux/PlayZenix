@@ -44,3 +44,136 @@
   <button onclick="document.getElementById('coins').textContent = Number(document.getElementById('coins').textContent) + 10">Earn 10 Coins</button>
 </body>
 </html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayZenix Gaming</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 25px 15px;
+  background: #101020;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+h1 { color: #00e5ff; font-size: 42px; }
+.subtitle { font-size: 19px; }
+.card {
+  background: #222244;
+  border-radius: 20px;
+  padding: 24px 16px;
+  max-width: 420px;
+  margin: 25px auto;
+}
+button {
+  background: #00e5ff;
+  color: #101020;
+  border: 0;
+  border-radius: 12px;
+  padding: 15px 25px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  margin: 8px;
+}
+button:active { transform: scale(.97); }
+#game { display: none; }
+#tapButton {
+  width: 180px;
+  height: 150px;
+  font-size: 25px;
+  border-radius: 22px;
+}
+#message { min-height: 24px; color: #00e5ff; }
+.small { color: #bdbdd7; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<h1>🎮 PlayZenix</h1>
+<p class="subtitle">Welcome to your gaming world!</p>
+
+<div class="card" id="home">
+  <h2>⚡ Quick Tap</h2>
+  <p>Play mini-games and earn virtual coins!</p>
+  <button onclick="startGame()">Start Game</button>
+  <h3>Coins: <span id="homeCoins">0</span> 🪙</h3>
+  <button onclick="earnCoins()">Earn 10 Coins</button>
+  <p class="small">Virtual coins only — no real money.</p>
+</div>
+
+<div class="card" id="game">
+  <h2>⚡ Quick Tap Challenge</h2>
+  <p>Tap as many times as you can in 10 seconds!</p>
+  <h3>Time: <span id="time">10</span>s</h3>
+  <h3>Taps: <span id="taps">0</span></h3>
+  <button id="tapButton" onclick="tap()">TAP! ⚡</button>
+  <p id="message"></p>
+  <button onclick="goHome()">Back to Home</button>
+</div>
+
+<script>
+let coins = 0;
+let taps = 0;
+let timeLeft = 10;
+let timer = null;
+let playing = false;
+
+function updateCoins() {
+  document.getElementById("homeCoins").textContent = coins;
+}
+
+function earnCoins() {
+  coins += 10;
+  updateCoins();
+  alert("Great! You earned 10 virtual coins!");
+}
+
+function startGame() {
+  document.getElementById("home").style.display = "none";
+  document.getElementById("game").style.display = "block";
+  taps = 0;
+  timeLeft = 10;
+  playing = true;
+  document.getElementById("taps").textContent = taps;
+  document.getElementById("time").textContent = timeLeft;
+  document.getElementById("message").textContent = "Go! Go! Go!";
+  clearInterval(timer);
+
+  timer = setInterval(function() {
+    timeLeft--;
+    document.getElementById("time").textContent = timeLeft;
+
+    if (timeLeft <= 0) {
+      clearInterval(timer);
+      playing = false;
+      coins += taps;
+      updateCoins();
+      document.getElementById("message").textContent =
+        "Time up! You earned " + taps + " virtual coins!";
+    }
+  }, 1000);
+}
+
+function tap() {
+  if (!playing) return;
+  taps++;
+  document.getElementById("taps").textContent = taps;
+}
+
+function goHome() {
+  clearInterval(timer);
+  playing = false;
+  document.getElementById("game").style.display = "none";
+  document.getElementById("home").style.display = "block";
+  updateCoins();
+}
+</script>
+
+</body>
+</html>
